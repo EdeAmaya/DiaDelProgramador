@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Inicio from "../components/Inicio";
 import Leaderboard from "../components/Leaderboard";
 import GameSelector from "../components/GameSelector";
-import AdminPanel from "../components/AdminPanel";
+import GameInterface from "../components/GameInterface";
 
 const SquidGames = () => {
   const [currentPage, setCurrentPage] = useState("inicio");
@@ -15,8 +15,8 @@ const SquidGames = () => {
         return <Leaderboard onNavigate={setCurrentPage} />;
       case "games":
         return <GameSelector onNavigate={setCurrentPage} />;
-      case "admin":
-        return <AdminPanel onNavigate={setCurrentPage} />;
+      case "game-interface":
+        return <GameInterface onNavigate={setCurrentPage} />;
       default:
         return <Inicio onNavigate={setCurrentPage} />;
     }
