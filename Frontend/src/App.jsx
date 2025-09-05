@@ -1,9 +1,6 @@
+// App.jsx
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import ProductsPage from './pages/ProductsPage'
-import SucursalesPage from './pages/SucursalesPage'
-import CategoriasPage from './pages/CategoriesPage'
+import SquidGames from './components/Pages' // Agregar esta línea
 import Nav from './components/Nav'
 import {BrowserRouter as Router, Routes, Route} from 'react-router'
 import './App.css'
@@ -14,14 +11,11 @@ function App() {
   return (
     <>
     <Router>
-|    <Nav />
+      <Nav />
       <Routes>
-        <Route path="/" element={<ProductsPage />} />
-       <Route path='/Categorias' element={<CategoriasPage />} />
-        <Route path='/Sucursales' element={<SucursalesPage />} />
+        <Route path='/squid-games' element={<SquidGames />} /> {/* Agregar esta línea */}
       </Routes>
     </Router>
-    
     </>
   )
 }

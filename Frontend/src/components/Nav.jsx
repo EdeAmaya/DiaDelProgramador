@@ -16,7 +16,8 @@ const Nav = () => {
     const navItems = [
         { name: 'Productos', href: '/' },
         { name: 'Categorias', href: '/Categorias' },
-        { name: 'Sucursales', href: '/Sucursales' }
+        { name: 'Sucursales', href: '/Sucursales' },
+        { name: 'Squid Games', href: '/squid-games', special: true } // Nueva opción con estilo especial
     ];
 
     return (
@@ -45,11 +46,25 @@ const Nav = () => {
                             <a
                                 key={item.name}
                                 href={item.href}
-                                className="relative px-4 py-2 text-white/90 hover:text-white font-medium transition-all duration-300 group"
+                                className={`relative px-4 py-2 font-medium transition-all duration-300 group ${
+                                    item.special 
+                                        ? 'text-red-300 hover:text-red-200 bg-red-600/20 rounded-lg border border-red-400/30' 
+                                        : 'text-white/90 hover:text-white'
+                                }`}
                             >
-                                <span className="relative z-10">{item.name}</span>
-                                <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"></div>
-                                <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 group-hover:left-1/8 transition-all duration-300"></div>
+                                <span className="relative z-10 flex items-center space-x-2">
+                                    {item.special && <span className="text-lg">🎮</span>}
+                                    <span>{item.name}</span>
+                                </span>
+                                {!item.special && (
+                                    <>
+                                        <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"></div>
+                                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 group-hover:left-1/8 transition-all duration-300"></div>
+                                    </>
+                                )}
+                                {item.special && (
+                                    <div className="absolute inset-0 bg-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                )}
                             </a>
                         ))}
                     </div>
@@ -67,17 +82,25 @@ const Nav = () => {
 
                 {/* Mobile Menu */}
                 <div className={`md:hidden transition-all duration-300 overflow-hidden ${
-                    isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+                    isOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
                 }`}>
                     <div className="py-4 space-y-2 bg-blue-700/90 backdrop-blur-sm rounded-lg mt-2 border border-white/10">
                         {navItems.map((item) => (
                             <a
                                 key={item.name}
                                 href={item.href}
-                                className="block px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg mx-2 transition-all duration-200 font-medium"
+                                className={`block px-4 py-3 rounded-lg mx-2 transition-all duration-200 font-medium ${
+                                    item.special
+                                        ? 'text-red-300 hover:text-red-200 hover:bg-red-600/20 border border-red-400/30'
+                                        : 'text-white/90 hover:text-white hover:bg-white/10'
+                                }`}
                                 onClick={() => setIsOpen(false)}
                             >
-                                {item.name}
+                                <div className="flex items-center space-x-2">
+                                    {item.special && <span className="text-lg">🎮</span>}
+                                    <span>{item.name}</span>
+                                    {item.special && <span className="text-xs bg-red-500 px-2 py-1 rounded-full">NUEVO</span>}
+                                </div>
                             </a>
                         ))}
                     </div>
