@@ -14,10 +14,7 @@ const Nav = () => {
     }, []);
 
     const navItems = [
-        { name: 'Productos', href: '/' },
-        { name: 'Categorias', href: '/Categorias' },
-        { name: 'Sucursales', href: '/Sucursales' },
-        { name: 'Squid Games', href: '/squid-games', special: true } // Nueva opción con estilo especial
+        { name: 'Squid Games', href: '/', special: true } 
     ];
 
     return (

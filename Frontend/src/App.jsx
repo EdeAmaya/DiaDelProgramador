@@ -1,22 +1,15 @@
-// App.jsx
-import { useState } from 'react'
-import SquidGames from './components/Pages' // Agregar esta línea
-import Nav from './components/Nav'
+import React from 'react'
+import SquidGames from './components/Pages.jsx'
 import {BrowserRouter as Router, Routes, Route} from 'react-router'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
     <Router>
-      <Nav />
       <Routes>
-        <Route path='/squid-games' element={<SquidGames />} /> {/* Agregar esta línea */}
+        <Route path='/' element={<SquidGames />} />
       </Routes>
     </Router>
-    </>
   )
 }
 
