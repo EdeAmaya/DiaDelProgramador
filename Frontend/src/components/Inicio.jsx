@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  User, 
-  Gamepad2, 
-  Monitor, 
-  Trophy, 
-  Settings, 
-  AlertTriangle, 
-  Wifi,
-  Users,
-  Target,
-  LogOut
-} from 'lucide-react';
+import { ArrowUpRight, Trophy, Play } from 'lucide-react';
 
 const Inicio = ({ onNavigate, onLogout }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,13 +11,16 @@ const Inicio = ({ onNavigate, onLogout }) => {
   });
 
   const codeTexts = [
-    "console.log('¡Bienvenido al Día del Programador!');",
-    "if (survival === true) { win(); }",
-    "while (alive) { compete(); }",
-    "function survive() { return courage > fear; }"
+    "while(players.length > 1) { eliminate(); }",
+    "if(survival === true) { return victory; }",
+    "SQUID_GAMES × DIA_DEL_PROGRAMADOR_2025"
   ];
 
-  // Cargar estadísticas reales desde tu backend
+  const loadingTexts = [
+    "CONEXION_ESTABLECIDA",
+    "SISTEMA_INICIANDO"
+  ];
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -49,7 +41,6 @@ const Inicio = ({ onNavigate, onLogout }) => {
         }
       } catch (error) {
         console.error("Error fetching stats:", error);
-        // Mantener valores por defecto en caso de error
       }
     };
 
@@ -68,21 +59,40 @@ const Inicio = ({ onNavigate, onLogout }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-8">
-          <div className="relative">
-            <div className="w-32 h-32 border-8 border-red-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Monitor className="w-12 h-12 text-red-500" />
+          {/* Logo CODER en estilo pixelado verde */}
+          <div className="mb-12">
+            <div className="text-green-400 font-mono text-8xl tracking-widest font-black">
+              CODER
             </div>
           </div>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-black text-red-500 animate-pulse">
-              CARGANDO SISTEMA...
-            </h1>
-            <p className="text-white font-mono text-lg">
-              {codeTexts[currentText]}
-            </p>
+
+          {/* Texto de estado alternante */}
+          <div className="text-orange-400 text-xl font-mono tracking-wider">
+            {loadingTexts[Math.floor(Date.now() / 2000) % loadingTexts.length]}
+          </div>
+
+          {/* Barra de progreso con cuadrados */}
+          <div className="flex space-x-1 justify-center">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div
+                key={i}
+                className={`w-4 h-4 border border-gray-600 ${
+                  i < (Date.now() / 100) % 10 ? 'bg-green-400' : 'bg-transparent'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Código de ejemplo */}
+          <div className="text-green-400 font-mono text-sm mt-8">
+            <div>while(players.length &gt; 1) &#123; eliminate(); &#125;</div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-green-400 font-mono text-sm mt-12">
+            SQUID_GAMES × DIA_DEL_PROGRAMADOR_2025
           </div>
         </div>
       </div>
@@ -90,198 +100,160 @@ const Inicio = ({ onNavigate, onLogout }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black text-white relative">
-      {/* Elementos de fondo animados */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-20 h-20 bg-red-500 rounded-full opacity-20 animate-bounce"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-pink-500 rounded-full opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-20 left-32 w-24 h-24 bg-red-400 rounded-full opacity-25 animate-bounce"></div>
-        <div className="absolute bottom-32 right-10 w-18 h-18 bg-pink-400 rounded-full opacity-20 animate-pulse"></div>
-        
-        {/* Símbolos de código flotantes */}
-        <div className="absolute top-1/4 left-1/4 text-6xl text-red-300 opacity-10 animate-pulse font-mono">{"{"}</div>
-        <div className="absolute top-3/4 right-1/4 text-6xl text-red-300 opacity-10 animate-pulse font-mono">{"}"}</div>
-        <div className="absolute top-1/2 left-1/6 text-4xl text-red-300 opacity-10 animate-bounce font-mono">;</div>
-        <div className="absolute top-1/3 right-1/6 text-4xl text-red-300 opacity-10 animate-bounce font-mono">()</div>
-      </div>
-
-      <div className="relative z-10 w-full">
-        {/* Header con botón de logout */}
-        <div className="flex justify-between items-start p-4 sm:p-6">
-          <div></div>
+    <div className="min-h-screen bg-black text-white">
+      {/* Header con diseño exacto de la imagen */}
+      <header className="bg-gradient-to-r from-pink-600 to-pink-700 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-pink-800 rounded flex items-center justify-center">
+              <div className="w-4 h-4 bg-white transform rotate-45"></div>
+            </div>
+            <div>
+              <h1 className="text-white font-bold text-lg">SQUID_GAMES.exe</h1>
+              <p className="text-pink-200 text-xs font-mono">v2025.programmer_day</p>
+            </div>
+          </div>
+          
           <button
             onClick={() => {
               localStorage.removeItem('isAuthenticated');
-              if (onLogout) {
-                onLogout();
-              }
-              window.location.reload(); // Forzar recarga para asegurar logout
+              if (onLogout) onLogout();
+              window.location.reload();
             }}
-            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg shadow-lg transition-all flex items-center space-x-2"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center space-x-2 transition-colors"
           >
-            <LogOut className="w-4 h-4" />
-            <span className="text-sm">Salir</span>
+            <ArrowUpRight className="w-4 h-4" />
+            <span className="text-sm font-medium">EXIT</span>
           </button>
         </div>
+      </header>
 
-        {/* Contenido principal */}
-        <div className="container mx-auto px-4 sm:px-6 py-8">
-          {/* Header principal - Responsive */}
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
-              <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
-                <User className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="bg-gradient-to-r from-pink-600 to-pink-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-pink-400">
-                <Gamepad2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
-                <Monitor className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-2 sm:mb-4 bg-gradient-to-r from-red-400 via-pink-500 to-red-600 bg-clip-text text-transparent drop-shadow-2xl">
-              SQUID GAMES
-            </h1>
-            <h2 className="text-2xl sm:text-4xl font-bold text-red-300 mb-1 sm:mb-2">×</h2>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              DÍA DEL PROGRAMADOR 2025
-            </h3>
-            
-            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-black bg-opacity-50 rounded-xl border-2 border-red-500 inline-block mx-2">
-              <p className="text-base sm:text-xl text-red-300 font-mono animate-pulse">
-                {codeTexts[currentText]}
-              </p>
+      {/* Variable de supervivencia */}
+      <div className="px-6 py-2 bg-gray-900 border-b border-gray-700">
+        <p className="text-gray-400 font-mono text-sm">
+          <span className="text-green-400">$</span> survival: <span className="text-blue-400">true</span>
+        </p>
+      </div>
+
+      {/* Contenido principal */}
+      <main className="px-6 py-12">
+        {/* Iconos geométricos centrales */}
+        <div className="flex items-center justify-center space-x-8 mb-16">
+          {/* Icono diamante rosa */}
+          <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-pink-600 transform rotate-45 rounded-lg flex items-center justify-center shadow-lg">
+            <div className="transform -rotate-45">
+              <div className="text-white text-xl font-bold">&lt;/&gt;</div>
             </div>
           </div>
-
-          {/* Sección principal con flexbox mejorado */}
-          <div className="flex-1 flex items-center justify-center py-8">
-            <div className="max-w-4xl w-full px-4">
-              {/* Mensaje principal */}
-              <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6">
-                <div className="bg-black bg-opacity-70 p-4 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-500 shadow-2xl">
-                  <h4 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-red-400 flex items-center justify-center space-x-2">
-                    <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" />
-                    <span>ATENCIÓN PROGRAMADORES</span>
-                    <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" />
-                  </h4>
-                  <p className="text-base sm:text-lg md:text-xl text-white leading-relaxed">
-                    Has sido seleccionado para participar en los juegos más desafiantes del mundo tech.
-                    <br className="hidden sm:block" />
-                    <span className="text-red-300 font-bold block sm:inline">
-                      Solo los mejores desarrolladores sobrevivirán.
-                    </span>
-                  </p>
-                  <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-                    <div className="flex items-center space-x-2 text-green-400">
-                      <Wifi className="w-4 h-4 animate-pulse" />
-                      <span className="font-mono text-sm sm:text-base">Status: ONLINE</span>
-                    </div>
-                    <div className="flex items-center space-x-2 text-yellow-400">
-                      <Users className="w-4 h-4 animate-pulse" />
-                      <span className="font-mono text-sm sm:text-base">Equipos: {stats.equipos}</span>
-                    </div>
-                    <div className="flex items-center space-x-2 text-blue-400">
-                      <User className="w-4 h-4 animate-pulse" />
-                      <span className="font-mono text-sm sm:text-base">Jugadores: {stats.jugadores}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Botones de navegación - Solo 2 botones ahora */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <button
-                  onClick={() => onNavigate('leaderboard')}
-                  className="group bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <div className="text-center space-y-3 sm:space-y-4">
-                    <div className="flex justify-center">
-                      <Trophy className="w-12 h-12 sm:w-16 sm:h-16 text-black group-hover:animate-bounce" />
-                    </div>
-                    <h5 className="text-xl sm:text-2xl font-black text-black">LEADERBOARD</h5>
-                    <p className="text-yellow-900 font-bold text-sm sm:text-base">
-                      Rankings en tiempo real
-                    </p>
-                    <div className="bg-black bg-opacity-20 p-2 rounded-lg">
-                      <code className="text-yellow-200 text-xs sm:text-sm">
-                        SELECT TOP FROM developers
-                      </code>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => onNavigate('games')}
-                  className="group bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <div className="text-center space-y-3 sm:space-y-4">
-                    <div className="flex justify-center">
-                      <Gamepad2 className="w-12 h-12 sm:w-16 sm:h-16 text-white group-hover:animate-spin" />
-                    </div>
-                    <h5 className="text-xl sm:text-2xl font-black text-white">JUEGOS</h5>
-                    <p className="text-red-200 font-bold text-sm sm:text-base">
-                      {stats.juegosActivos} desafíos letales
-                    </p>
-                    <div className="bg-black bg-opacity-30 p-2 rounded-lg">
-                      <code className="text-red-200 text-xs sm:text-sm">
-                        while(alive) compete()
-                      </code>
-                    </div>
-                  </div>
-                </button>
-              </div>
+          
+          {/* Icono círculo verde */}
+          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+            <div className="w-8 h-8 border-2 border-white rounded-full flex items-center justify-center">
+              <div className="w-3 h-3 bg-white rounded-full"></div>
             </div>
           </div>
-
-          {/* Footer */}
-          <div className="text-center mt-6 sm:mt-8 pb-8">
-            <div className="inline-flex items-center space-x-2 sm:space-x-4 bg-black bg-opacity-50 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-red-500">
-              <Target className="w-3 h-3 text-red-500 animate-pulse" />
-              <p className="text-red-300 font-mono text-xs sm:text-sm">
-                Sistema inicializado • {stats.equipos} equipos • {stats.jugadores} programadores listos
-              </p>
-              <Target className="w-3 h-3 text-green-500 animate-pulse" />
+          
+          {/* Icono triángulo azul */}
+          <div className="relative">
+            <div className="w-0 h-0 border-l-10 border-r-10 border-b-17 border-l-transparent border-r-transparent border-b-blue-500" 
+                 style={{
+                   borderLeftWidth: '40px',
+                   borderRightWidth: '40px', 
+                   borderBottomWidth: '70px',
+                   filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))'
+                 }}>
             </div>
-            
-            <div className="mt-2 sm:mt-4 flex justify-center space-x-4 sm:space-x-8 text-xs text-gray-400">
-              <span className="flex items-center space-x-1">
-                <Monitor className="w-3 h-3" />
-                <span>Eliminación</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <Settings className="w-3 h-3" />
-                <span>Supervivencia</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <AlertTriangle className="w-3 h-3" />
-                <span>Peligro</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <User className="w-3 h-3" />
-                <span>Programador</span>
-              </span>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4">
+              <div className="text-white text-lg font-bold">⚡</div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Efecto de partículas */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-red-400 rounded-full animate-ping"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`
-            }}
-          />
-        ))}
-      </div>
+        {/* Títulos principales */}
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-black mb-4">
+            <span className="text-pink-500">SQUID</span>
+            <br />
+            <span className="text-green-500">GAMES</span>
+          </h1>
+          <div className="text-white text-3xl font-bold mb-8">×</div>
+          <h2 className="text-4xl font-black text-purple-500 mb-8">
+            DÍA DEL PROGRAMADOR
+          </h2>
+        </div>
+
+        {/* Terminal section */}
+        <div className="max-w-4xl mx-auto mb-20">
+          <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+            {/* Terminal header */}
+            <div className="bg-gray-800 px-4 py-3 border-b border-gray-700">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="text-gray-400 text-sm font-mono ml-4">terminal.js</span>
+              </div>
+            </div>
+            
+            {/* Terminal content */}
+            <div className="p-6 font-mono text-sm">
+              <div className="text-green-400 mb-2">
+                <span className="text-gray-500">$</span> node squid_games.js --mode survival
+              </div>
+              <div className="text-gray-400 mb-2">
+                // Solo los mejores desarrolladores sobrevivirán
+              </div>
+              <div className="text-yellow-400 mb-4">
+                <span className="text-gray-500">&gt;</span> Iniciando competencia letal para programadores...
+              </div>
+              
+              {/* Código de ejemplo del terminal */}
+              <div className="text-white space-y-1">
+                <div>console.log('game_start');</div>
+                <div className="text-gray-400 text-right mt-4">
+                  {codeTexts[currentText]}
+                </div>
+                <div className="text-right text-sm text-gray-500 mt-4">
+                  SQUID_GAMES × DIA_DEL_PROGRAMADOR_2025
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer con botones - Agregamos JUEGOS aquí */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-600 to-yellow-600 p-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Botón JUEGOS */}
+          <button
+            onClick={() => onNavigate('games')}
+            className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-black text-xl py-4 rounded-lg transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-3"
+          >
+            <div className="w-8 h-8 bg-purple-700 rounded-lg flex items-center justify-center">
+              <Play className="w-5 h-5 text-white" />
+            </div>
+            <span>JUEGOS</span>
+          </button>
+
+          {/* Botón LEADERBOARD */}
+          <button
+            onClick={() => onNavigate('leaderboard')}
+            className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-black font-black text-xl py-4 rounded-lg transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-3"
+          >
+            <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
+              <Trophy className="w-5 h-5 text-white" />
+            </div>
+            <span>LEADERBOARD</span>
+          </button>
+        </div>
+        
+        <div className="text-center mt-3">
+          <p className="text-orange-100 font-mono text-sm">
+            {stats.juegosActivos} desafíos disponibles • Rankings en tiempo real
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -2,23 +2,20 @@ import React, { useState } from "react";
 import Inicio from "../components/Inicio";
 import Leaderboard from "../components/Leaderboard";
 import GameSelector from "../components/GameSelector";
-import GameInterface from "../components/GameInterface";
 
-const SquidGames = () => {
+const SquidGames = ({ onLogout }) => {
   const [currentPage, setCurrentPage] = useState("inicio");
 
   const renderPage = () => {
     switch(currentPage) {
       case "inicio":
-        return <Inicio onNavigate={setCurrentPage} />;
+        return <Inicio onNavigate={setCurrentPage} onLogout={onLogout} />;
       case "leaderboard":
         return <Leaderboard onNavigate={setCurrentPage} />;
       case "games":
         return <GameSelector onNavigate={setCurrentPage} />;
-      case "game-interface":
-        return <GameInterface onNavigate={setCurrentPage} />;
       default:
-        return <Inicio onNavigate={setCurrentPage} />;
+        return <Inicio onNavigate={setCurrentPage} onLogout={onLogout} />;
     }
   };
 
