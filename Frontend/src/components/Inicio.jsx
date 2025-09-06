@@ -21,29 +21,88 @@ const Inicio = ({ onNavigate, onLogout }) => {
     "SISTEMA_INICIANDO"
   ];
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [equiposRes, jugadoresRes] = await Promise.all([
-          fetch('http://localhost:4000/api/equipos'),
-          fetch('http://localhost:4000/api/jugadores')
-        ]);
+  const fetchStats = async () => {
+    try {
+      const [equiposRes, jugadoresRes] = await Promise.all([
+        fetch('http://localhost:4000/api/equipos'),
+        fetch('http://localhost:4000/api/jugadores')
+      ]);
+      
+      if (equiposRes.ok && jugadoresRes.ok) {
+        const equiposData = await equiposRes.json();
+        const jugadoresData = await jugadoresRes.json();
         
-        if (equiposRes.ok && jugadoresRes.ok) {
+        setStats({
+          equipos: equiposData.length,
+          jugadores: jugadoresData.length,
+          juegosActivos: 12
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  const handleResetPoints = async () => {
+    if (window.confirm('🚨 RESETEAR TODOS LOS PUNTOS 🚨\n\n¿Estás ABSOLUTAMENTE SEGURO de que quieres resetear TODOS los puntos de equipos y jugadores a 0?\n\nEsta acción NO se puede deshacer.')) {
+      try {
+        // Resetear equipos
+        const equiposRes = await fetch('http://localhost:4000/api/equipos');
+        if (equiposRes.ok) {
           const equiposData = await equiposRes.json();
+          
+          const equipoUpdates = equiposData.map(equipo => 
+            fetch(`http://localhost:4000/api/equipos/${equipo._id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                nombre: equipo.nombre,
+                imagen: equipo.imagen,
+                puntuacion: 0
+              }),
+            })
+          );
+          
+          await Promise.all(equipoUpdates);
+        }
+
+        // Resetear jugadores
+        const jugadoresRes = await fetch('http://localhost:4000/api/jugadores');
+        if (jugadoresRes.ok) {
           const jugadoresData = await jugadoresRes.json();
           
-          setStats({
-            equipos: equiposData.length,
-            jugadores: jugadoresData.length,
-            juegosActivos: 12
-          });
+          const jugadorUpdates = jugadoresData.map(jugador => 
+            fetch(`http://localhost:4000/api/jugadores/${jugador._id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                numero: jugador.numero,
+                equipo: jugador.equipo._id || jugador.equipo,
+                puntuacion: 0
+              }),
+            })
+          );
+          
+          await Promise.all(jugadorUpdates);
         }
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
 
+        alert('✅ RESET COMPLETADO\n\nTodos los puntos han sido reseteados a 0 exitosamente!');
+        
+        // Refrescar estadísticas
+        fetchStats();
+        
+      } catch (error) {
+        console.error('Error al resetear puntos:', error);
+        alert('❌ ERROR\n\nHubo un problema al resetear los puntos. Inténtalo de nuevo.');
+      }
+    }
+  };
+
+  useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
     const textInterval = setInterval(() => {
       setCurrentText(prev => (prev + 1) % codeTexts.length);
@@ -117,6 +176,7 @@ const Inicio = ({ onNavigate, onLogout }) => {
           <button
             onClick={() => {
               localStorage.removeItem('isAuthenticated');
+              localStorage.removeItem('loginTime');
               if (onLogout) onLogout();
               window.location.reload();
             }}
@@ -128,10 +188,16 @@ const Inicio = ({ onNavigate, onLogout }) => {
         </div>
       </header>
 
-      {/* Variable de supervivencia */}
+      {/* Variable de supervivencia CON RESET EN EL SÍMBOLO $ */}
       <div className="px-6 py-2 bg-gray-900 border-b border-gray-700">
         <p className="text-gray-400 font-mono text-sm">
-          <span className="text-green-400">$</span> survival: <span className="text-blue-400">true</span>
+          <span 
+            className="text-green-400 cursor-pointer hover:text-red-500 hover:scale-110 transition-all select-none font-bold" 
+            onClick={handleResetPoints}
+            title="🚨 CLICK PARA RESETEAR TODOS LOS PUNTOS 🚨"
+          >
+            $
+          </span> survival: <span className="text-blue-400">true</span>
         </p>
       </div>
 
