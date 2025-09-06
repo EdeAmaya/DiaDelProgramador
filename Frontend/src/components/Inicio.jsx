@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { 
+  User, 
+  Gamepad2, 
+  Monitor, 
+  Trophy, 
+  Settings, 
+  AlertTriangle, 
+  Wifi,
+  Users,
+  Target,
+  LogOut
+} from 'lucide-react';
 
-const Inicio = ({ onNavigate }) => {
+const Inicio = ({ onNavigate, onLogout }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentText, setCurrentText] = useState(0);
   const [stats, setStats] = useState({
@@ -61,7 +73,7 @@ const Inicio = ({ onNavigate }) => {
           <div className="relative">
             <div className="w-32 h-32 border-8 border-red-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-4xl">💻</span>
+              <Monitor className="w-12 h-12 text-red-500" />
             </div>
           </div>
           <div className="space-y-4">
@@ -78,9 +90,9 @@ const Inicio = ({ onNavigate }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black text-white overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black text-white relative">
       {/* Elementos de fondo animados */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-20 h-20 bg-red-500 rounded-full opacity-20 animate-bounce"></div>
         <div className="absolute top-32 right-20 w-16 h-16 bg-pink-500 rounded-full opacity-30 animate-pulse"></div>
         <div className="absolute bottom-20 left-32 w-24 h-24 bg-red-400 rounded-full opacity-25 animate-bounce"></div>
@@ -93,125 +105,164 @@ const Inicio = ({ onNavigate }) => {
         <div className="absolute top-1/3 right-1/6 text-4xl text-red-300 opacity-10 animate-bounce font-mono">()</div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-8 h-screen flex flex-col">
-        {/* Header - Responsive */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
-            <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
-              <span className="text-2xl sm:text-4xl">👨‍💻</span>
-            </div>
-            <div className="bg-gradient-to-r from-pink-600 to-pink-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-pink-400">
-              <span className="text-2xl sm:text-4xl">🎮</span>
-            </div>
-            <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
-              <span className="text-2xl sm:text-4xl">📺</span>
-            </div>
-          </div>
-          
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-2 sm:mb-4 bg-gradient-to-r from-red-400 via-pink-500 to-red-600 bg-clip-text text-transparent drop-shadow-2xl">
-            SQUID GAMES
-          </h1>
-          <h2 className="text-2xl sm:text-4xl font-bold text-red-300 mb-1 sm:mb-2">×</h2>
-          <h3 className="text-3xl sm:text-4xl md:text-5xl font-black bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-            DÍA DEL PROGRAMADOR
-          </h3>
-          
-          <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-black bg-opacity-50 rounded-xl border-2 border-red-500 inline-block mx-2">
-            <p className="text-base sm:text-xl text-red-300 font-mono animate-pulse">
-              {codeTexts[currentText]}
-            </p>
-          </div>
+      <div className="relative z-10 w-full">
+        {/* Header con botón de logout */}
+        <div className="flex justify-between items-start p-4 sm:p-6">
+          <div></div>
+          <button
+            onClick={() => {
+              localStorage.removeItem('isAuthenticated');
+              if (onLogout) {
+                onLogout();
+              }
+              window.location.reload(); // Forzar recarga para asegurar logout
+            }}
+            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg shadow-lg transition-all flex items-center space-x-2"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="text-sm">Salir</span>
+          </button>
         </div>
 
-        {/* Sección principal */}
-        <div className="flex-1 flex items-center justify-center">
-          <div className="max-w-4xl w-full px-4">
-            {/* Mensaje principal */}
-            <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6">
-              <div className="bg-black bg-opacity-70 p-4 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-500 shadow-2xl">
-                <h4 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-red-400">
-                  🚨 ATENCIÓN PROGRAMADORES 🚨
-                </h4>
-                <p className="text-base sm:text-lg md:text-xl text-white leading-relaxed">
-                  Has sido seleccionado para participar en los juegos más desafiantes del mundo tech.
-                  <br className="hidden sm:block" />
-                  <span className="text-red-300 font-bold block sm:inline">
-                    Solo los mejores desarrolladores sobrevivirán.
-                  </span>
-                </p>
-                <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-                  <div className="flex items-center space-x-2 text-green-400">
-                    <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                    <span className="font-mono text-sm sm:text-base">Status: ONLINE</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-yellow-400">
-                    <span className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
-                    <span className="font-mono text-sm sm:text-base">Equipos: {stats.equipos}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-blue-400">
-                    <span className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></span>
-                    <span className="font-mono text-sm sm:text-base">Jugadores: {stats.jugadores}</span>
+        {/* Contenido principal */}
+        <div className="container mx-auto px-4 sm:px-6 py-8">
+          {/* Header principal - Responsive */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
+              <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
+                <User className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+              <div className="bg-gradient-to-r from-pink-600 to-pink-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-pink-400">
+                <Gamepad2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+              <div className="bg-gradient-to-r from-red-600 to-red-700 p-2 sm:p-4 rounded-full shadow-2xl border-2 sm:border-4 border-red-400">
+                <Monitor className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-2 sm:mb-4 bg-gradient-to-r from-red-400 via-pink-500 to-red-600 bg-clip-text text-transparent drop-shadow-2xl">
+              SQUID GAMES
+            </h1>
+            <h2 className="text-2xl sm:text-4xl font-bold text-red-300 mb-1 sm:mb-2">×</h2>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              DÍA DEL PROGRAMADOR 2025
+            </h3>
+            
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-black bg-opacity-50 rounded-xl border-2 border-red-500 inline-block mx-2">
+              <p className="text-base sm:text-xl text-red-300 font-mono animate-pulse">
+                {codeTexts[currentText]}
+              </p>
+            </div>
+          </div>
+
+          {/* Sección principal con flexbox mejorado */}
+          <div className="flex-1 flex items-center justify-center py-8">
+            <div className="max-w-4xl w-full px-4">
+              {/* Mensaje principal */}
+              <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6">
+                <div className="bg-black bg-opacity-70 p-4 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-500 shadow-2xl">
+                  <h4 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-red-400 flex items-center justify-center space-x-2">
+                    <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" />
+                    <span>ATENCIÓN PROGRAMADORES</span>
+                    <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" />
+                  </h4>
+                  <p className="text-base sm:text-lg md:text-xl text-white leading-relaxed">
+                    Has sido seleccionado para participar en los juegos más desafiantes del mundo tech.
+                    <br className="hidden sm:block" />
+                    <span className="text-red-300 font-bold block sm:inline">
+                      Solo los mejores desarrolladores sobrevivirán.
+                    </span>
+                  </p>
+                  <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <div className="flex items-center space-x-2 text-green-400">
+                      <Wifi className="w-4 h-4 animate-pulse" />
+                      <span className="font-mono text-sm sm:text-base">Status: ONLINE</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-yellow-400">
+                      <Users className="w-4 h-4 animate-pulse" />
+                      <span className="font-mono text-sm sm:text-base">Equipos: {stats.equipos}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-blue-400">
+                      <User className="w-4 h-4 animate-pulse" />
+                      <span className="font-mono text-sm sm:text-base">Jugadores: {stats.jugadores}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Botones de navegación - Solo 2 botones ahora */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <button
-                onClick={() => onNavigate('leaderboard')}
-                className="group bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
-                <div className="text-center space-y-3 sm:space-y-4">
-                  <div className="text-4xl sm:text-6xl group-hover:animate-bounce">🏆</div>
-                  <h5 className="text-xl sm:text-2xl font-black text-black">LEADERBOARD</h5>
-                  <p className="text-yellow-900 font-bold text-sm sm:text-base">
-                    Rankings en tiempo real
-                  </p>
-                  <div className="bg-black bg-opacity-20 p-2 rounded-lg">
-                    <code className="text-yellow-200 text-xs sm:text-sm">
-                      SELECT TOP FROM developers
-                    </code>
+              {/* Botones de navegación - Solo 2 botones ahora */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <button
+                  onClick={() => onNavigate('leaderboard')}
+                  className="group bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <div className="text-center space-y-3 sm:space-y-4">
+                    <div className="flex justify-center">
+                      <Trophy className="w-12 h-12 sm:w-16 sm:h-16 text-black group-hover:animate-bounce" />
+                    </div>
+                    <h5 className="text-xl sm:text-2xl font-black text-black">LEADERBOARD</h5>
+                    <p className="text-yellow-900 font-bold text-sm sm:text-base">
+                      Rankings en tiempo real
+                    </p>
+                    <div className="bg-black bg-opacity-20 p-2 rounded-lg">
+                      <code className="text-yellow-200 text-xs sm:text-sm">
+                        SELECT TOP FROM developers
+                      </code>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
 
-              <button
-                onClick={() => onNavigate('games')}
-                className="group bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
-                <div className="text-center space-y-3 sm:space-y-4">
-                  <div className="text-4xl sm:text-6xl group-hover:animate-spin">⚙️</div>
-                  <h5 className="text-xl sm:text-2xl font-black text-white">JUEGOS</h5>
-                  <p className="text-red-200 font-bold text-sm sm:text-base">
-                    {stats.juegosActivos} desafíos letales
-                  </p>
-                  <div className="bg-black bg-opacity-30 p-2 rounded-lg">
-                    <code className="text-red-200 text-xs sm:text-sm">
-                      while(alive) compete()
-                    </code>
+                <button
+                  onClick={() => onNavigate('games')}
+                  className="group bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 p-6 sm:p-8 rounded-2xl border-2 sm:border-4 border-red-400 shadow-2xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <div className="text-center space-y-3 sm:space-y-4">
+                    <div className="flex justify-center">
+                      <Gamepad2 className="w-12 h-12 sm:w-16 sm:h-16 text-white group-hover:animate-spin" />
+                    </div>
+                    <h5 className="text-xl sm:text-2xl font-black text-white">JUEGOS</h5>
+                    <p className="text-red-200 font-bold text-sm sm:text-base">
+                      {stats.juegosActivos} desafíos letales
+                    </p>
+                    <div className="bg-black bg-opacity-30 p-2 rounded-lg">
+                      <code className="text-red-200 text-xs sm:text-sm">
+                        while(alive) compete()
+                      </code>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="text-center mt-6 sm:mt-8">
-          <div className="inline-flex items-center space-x-2 sm:space-x-4 bg-black bg-opacity-50 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-red-500">
-            <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
-            <p className="text-red-300 font-mono text-xs sm:text-sm">
-              Sistema inicializado • {stats.equipos} equipos • {stats.jugadores} programadores listos
-            </p>
-            <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-          </div>
-          
-          <div className="mt-2 sm:mt-4 flex justify-center space-x-4 sm:space-x-8 text-xs text-gray-400">
-            <span>📺 = Eliminación</span>
-            <span>⬜ = Supervivencia</span>
-            <span>🔴 = Peligro</span>
-            <span>💻 = Programador</span>
+          {/* Footer */}
+          <div className="text-center mt-6 sm:mt-8 pb-8">
+            <div className="inline-flex items-center space-x-2 sm:space-x-4 bg-black bg-opacity-50 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-red-500">
+              <Target className="w-3 h-3 text-red-500 animate-pulse" />
+              <p className="text-red-300 font-mono text-xs sm:text-sm">
+                Sistema inicializado • {stats.equipos} equipos • {stats.jugadores} programadores listos
+              </p>
+              <Target className="w-3 h-3 text-green-500 animate-pulse" />
+            </div>
+            
+            <div className="mt-2 sm:mt-4 flex justify-center space-x-4 sm:space-x-8 text-xs text-gray-400">
+              <span className="flex items-center space-x-1">
+                <Monitor className="w-3 h-3" />
+                <span>Eliminación</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <Settings className="w-3 h-3" />
+                <span>Supervivencia</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <AlertTriangle className="w-3 h-3" />
+                <span>Peligro</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <User className="w-3 h-3" />
+                <span>Programador</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>

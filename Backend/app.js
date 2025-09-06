@@ -2,14 +2,11 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-
-
 import EquiposRoutes from "./src/routes/Equipos.js";
 import JugadoresRoutes from "./src/routes/Jugadores.js";
+import AuthRoutes from "./src/routes/Auth.js";
 
 const app = express();
-
-
 
 // Configuración de CORS
 app.use(cors({
@@ -23,15 +20,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
-
 // Rutas de la aplicación
 app.use("/api/equipos", EquiposRoutes);
 app.use("/api/jugadores", JugadoresRoutes);
-
-
-
-
+app.use("/api/auth", AuthRoutes);
 
 // Middleware de manejo de errores
 app.use((error, req, res, next) => {
@@ -46,6 +38,5 @@ app.use((error, req, res, next) => {
 app.use('*', (req, res) => {
     res.status(404).json({ message: 'Ruta no encontrada' });
 });
-
 
 export default app;

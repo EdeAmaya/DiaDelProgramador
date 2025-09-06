@@ -1,5 +1,5 @@
-// src/components/Leaderboard.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { ArrowLeft, Trophy, User, Users, Target, Wifi } from 'lucide-react';
 
 const Leaderboard = ({ onNavigate }) => {
   const [equipos, setEquipos] = useState([]);
@@ -34,7 +34,7 @@ const Leaderboard = ({ onNavigate }) => {
             {equipo.puntuacion}
           </div>
           <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded border-2 border-white flex items-center justify-center">
-            <span className="text-white text-xs sm:text-sm">🏆</span>
+            <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ const Leaderboard = ({ onNavigate }) => {
             {jugador.puntuacion}
           </div>
           <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded border-2 border-white flex items-center justify-center">
-            <span className="text-white text-xs sm:text-sm">🏆</span>
+            <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
           </div>
         </div>
       </div>
@@ -81,9 +81,13 @@ const Leaderboard = ({ onNavigate }) => {
         const equiposData = await equiposRes.json();
         const jugadoresData = await jugadoresRes.json();
         
-        // Ordenar por puntuación
-        const equiposOrdenados = equiposData.sort((a, b) => b.puntuacion - a.puntuacion);
-        const jugadoresOrdenados = jugadoresData.sort((a, b) => b.puntuacion - a.puntuacion);
+        // Ordenar por puntuación y tomar solo top 10
+        const equiposOrdenados = equiposData
+          .sort((a, b) => b.puntuacion - a.puntuacion)
+          .slice(0, 10);
+        const jugadoresOrdenados = jugadoresData
+          .sort((a, b) => b.puntuacion - a.puntuacion)
+          .slice(0, 10);
         
         setEquipos(equiposOrdenados);
         setJugadores(jugadoresOrdenados);
@@ -125,7 +129,7 @@ const Leaderboard = ({ onNavigate }) => {
           <div className="relative">
             <div className="w-32 h-32 border-8 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-4xl">🏆</span>
+              <Trophy className="w-12 h-12 text-yellow-500" />
             </div>
           </div>
           <div className="space-y-4">
@@ -133,7 +137,7 @@ const Leaderboard = ({ onNavigate }) => {
               CARGANDO RANKINGS...
             </h1>
             <p className="text-white font-mono text-lg">
-              Preparando tabla de posiciones
+              Preparando tabla de posiciones TOP 10
             </p>
           </div>
         </div>
@@ -153,17 +157,17 @@ const Leaderboard = ({ onNavigate }) => {
               onClick={() => onNavigate('inicio')}
               className="bg-black text-yellow-500 p-2 sm:p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
             >
-              <span className="text-xl sm:text-2xl">←</span>
+              <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
             <div className="bg-black text-yellow-500 p-2 sm:p-4 rounded-full shadow-lg">
-              <span className="text-2xl sm:text-3xl">🏆</span>
+              <Trophy className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-wide">
-                LEADERBOARD SQUID GAMES
+                LEADERBOARD TOP 10
               </h1>
               <p className="text-yellow-200 text-sm sm:text-lg font-medium">
-                Rankings en Tiempo Real • Día del Programador 2024
+                Rankings en Tiempo Real • Día del Programador 2025
               </p>
             </div>
           </div>
@@ -172,16 +176,17 @@ const Leaderboard = ({ onNavigate }) => {
 
       <div className="max-w-7xl mx-auto p-3 sm:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-          {/* Ranking de Equipos */}
+          {/* Ranking de Equipos TOP 10 */}
           <div className="bg-brown-800 rounded-lg shadow-2xl overflow-hidden border-2 sm:border-4 border-brown-600 flex flex-col" style={{ height: '70vh', minHeight: '400px' }}>
             {/* Header del ranking de equipos */}
             <div className="bg-brown-900 px-3 sm:px-6 py-3 sm:py-4 border-b-2 sm:border-b-4 border-brown-600 flex-shrink-0">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-2xl font-black text-yellow-400">
-                  🏆 RANKING EQUIPOS
+                <h2 className="text-lg sm:text-2xl font-black text-yellow-400 flex items-center space-x-2">
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span>TOP 10 EQUIPOS</span>
                 </h2>
                 <div className="text-brown-300 font-mono text-xs sm:text-sm">
-                  {equipos.length} equipos
+                  {equipos.length}/10
                 </div>
               </div>
             </div>
@@ -190,7 +195,9 @@ const Leaderboard = ({ onNavigate }) => {
             <div className="flex-1 overflow-y-auto">
               {equipos.length === 0 ? (
                 <div className="text-center py-8 sm:py-16">
-                  <div className="text-4xl sm:text-6xl text-brown-400 mb-4">📊</div>
+                  <div className="flex justify-center mb-4">
+                    <Users className="w-12 h-12 sm:w-16 sm:h-16 text-brown-400" />
+                  </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-brown-400 mb-2">No hay equipos registrados</h3>
                   <p className="text-brown-300 text-sm sm:text-base">¡Sé el primero en registrar un equipo!</p>
                 </div>
@@ -202,16 +209,17 @@ const Leaderboard = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Ranking de Jugadores */}
+          {/* Ranking de Jugadores TOP 10 */}
           <div className="bg-brown-800 rounded-lg shadow-2xl overflow-hidden border-2 sm:border-4 border-brown-600 flex flex-col" style={{ height: '70vh', minHeight: '400px' }}>
             {/* Header del ranking de jugadores */}
             <div className="bg-brown-900 px-3 sm:px-6 py-3 sm:py-4 border-b-2 sm:border-b-4 border-brown-600 flex-shrink-0">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-2xl font-black text-yellow-400">
-                  👤 RANKING INDIVIDUAL
+                <h2 className="text-lg sm:text-2xl font-black text-yellow-400 flex items-center space-x-2">
+                  <User className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span>TOP 10 JUGADORES</span>
                 </h2>
                 <div className="text-brown-300 font-mono text-xs sm:text-sm">
-                  {jugadores.length} jugadores
+                  {jugadores.length}/10
                 </div>
               </div>
             </div>
@@ -220,7 +228,9 @@ const Leaderboard = ({ onNavigate }) => {
             <div className="flex-1 overflow-y-auto">
               {jugadores.length === 0 ? (
                 <div className="text-center py-8 sm:py-16">
-                  <div className="text-4xl sm:text-6xl text-brown-400 mb-4">👤</div>
+                  <div className="flex justify-center mb-4">
+                    <User className="w-12 h-12 sm:w-16 sm:h-16 text-brown-400" />
+                  </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-brown-400 mb-2">No hay jugadores registrados</h3>
                   <p className="text-brown-300 text-sm sm:text-base">¡Los juegos están esperando por ti!</p>
                 </div>
@@ -236,11 +246,11 @@ const Leaderboard = ({ onNavigate }) => {
         {/* Indicador de actualización en tiempo real */}
         <div className="text-center mt-4 sm:mt-6">
           <div className="inline-flex items-center space-x-2 bg-black bg-opacity-50 px-3 sm:px-4 py-2 rounded-full border border-yellow-500">
-            <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse"></span>
+            <Wifi className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 animate-pulse" />
             <p className="text-yellow-300 font-mono text-xs sm:text-sm">
-              Actualizando cada 3 segundos • Rankings en vivo
+              Actualizando cada 3 segundos • TOP 10 Rankings en vivo
             </p>
-            <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse"></span>
+            <Target className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 animate-pulse" />
           </div>
         </div>
       </div>
